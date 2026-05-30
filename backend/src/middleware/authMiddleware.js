@@ -10,7 +10,7 @@ function requireAuth(request, response, next) {
   const token = authHeader.split(" ")[1];
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET || "lsd_quiz_default_jwt_secret_2026");
     request.user = payload;
     next();
   } catch (error) {

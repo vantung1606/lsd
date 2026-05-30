@@ -5,6 +5,11 @@ if (!user || !getToken()) {
 
 document.getElementById("username-display").textContent = user.username;
 
+// Display user stats
+document.getElementById("stat-score").textContent = user.totalScore || 0;
+document.getElementById("stat-correct").textContent = user.totalCorrectAnswers || 0;
+document.getElementById("stat-attempts").textContent = user.totalAttempts || 0;
+
 document.querySelectorAll(".range-button").forEach((button) => {
   button.addEventListener("click", () => {
     const start = Number(button.dataset.start);

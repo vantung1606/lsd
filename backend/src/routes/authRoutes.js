@@ -72,7 +72,7 @@ router.post("/login", async (request, response) => {
         userId: user.id,
         username: user.username
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || "lsd_quiz_default_jwt_secret_2026",
       { expiresIn: "7d" }
     );
 
