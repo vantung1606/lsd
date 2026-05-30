@@ -2,7 +2,8 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { connectDatabase, initializeSchema } = require("./config/db");
+const { connectDatabase, getDatabase, initializeSchema } = require("./config/db");
+const { autoSeedQuestionsIfNeeded } = require("./seed/autoSeedOnStart");
 const authRoutes = require("./routes/authRoutes");
 const questionRoutes = require("./routes/questionRoutes");
 const quizRoutes = require("./routes/quizRoutes");
@@ -31,6 +32,7 @@ async function startServer() {
   try {
     await connectDatabase();
     await initializeSchema();
+    await autoSeedQuestionsIfNeeded(getDatabase());
 
     app.listen(port, () => {
       console.log(`Server is running at http://localhost:${port}`);
