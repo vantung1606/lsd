@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard | Lịch sử Đảng Quiz</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card">
+        <h1>🌸 Bảng Xếp Hạng 🏆</h1>
+        <div class="menu-actions">
+          <button id="top10-button" class="secondary-button">Top 10</button>
+          <button id="top50-button" class="secondary-button">Top 50</button>
+          <a class="primary-button link-button" href="./menu.html">Về Menu</a>
+        </div>
+
+        <div class="leaderboard-table-wrapper">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Hạng</th>
+                <th>Người chơi</th>
+                <th>Tổng đúng</th>
+                <th>Tổng điểm</th>
+                <th>Lượt chơi</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./scripts/api.js"></script>
+    <script src="./scripts/leaderboard.js"></script>
+  </body>
+  </html>

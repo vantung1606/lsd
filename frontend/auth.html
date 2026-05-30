@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập | Lịch sử Đảng Quiz</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card">
+        <h1>🌸 Lịch sử Đảng Quiz 🎀</h1>
+        <p class="subtitle">Đăng ký hoặc đăng nhập để bắt đầu đua top 🐱</p>
+
+        <div class="tabs">
+          <button id="register-tab" class="tab-button active">Đăng ký</button>
+          <button id="login-tab" class="tab-button">Đăng nhập</button>
+        </div>
+
+        <form id="auth-form" class="form">
+          <label>Tên tài khoản</label>
+          <input id="username" type="text" required minlength="3" />
+
+          <label>Mật khẩu</label>
+          <input id="password" type="password" required minlength="6" />
+
+          <button type="submit" class="primary-button">Tiếp tục</button>
+        </form>
+
+        <p id="auth-message" class="message"></p>
+      </section>
+    </main>
+
+    <script src="./scripts/api.js"></script>
+    <script src="./scripts/auth.js"></script>
+  </body>
+  </html>

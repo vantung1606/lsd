@@ -1,0 +1,62 @@
+[
+  {
+    "questionNumber": 1,
+    "questionText": "Đảng Cộng sản Việt Nam được thành lập vào thời gian nào?",
+    "options": [
+      { "text": "Tháng 01/1930" },
+      { "text": "Tháng 02/1930" },
+      { "text": "Tháng 03/1930" },
+      { "text": "Tháng 05/1941" }
+    ],
+    "correctOptionIndex": 1,
+    "explanation": "Hội nghị hợp nhất các tổ chức cộng sản diễn ra đầu tháng 02/1930 tại Hương Cảng, là mốc thành lập Đảng."
+  },
+  {
+    "questionNumber": 2,
+    "questionText": "Ai là Tổng Bí thư đầu tiên của Đảng Cộng sản Việt Nam?",
+    "options": [
+      { "text": "Trần Phú" },
+      { "text": "Lê Duẩn" },
+      { "text": "Nguyễn Văn Cừ" },
+      { "text": "Hồ Chí Minh" }
+    ],
+    "correctOptionIndex": 0,
+    "explanation": "Đồng chí Trần Phú là Tổng Bí thư đầu tiên của Đảng."
+  },
+  {
+    "questionNumber": 3,
+    "questionText": "Cách mạng Tháng Tám thành công vào năm nào?",
+    "options": [
+      { "text": "Năm 1943" },
+      { "text": "Năm 1945" },
+      { "text": "Năm 1946" },
+      { "text": "Năm 1954" }
+    ],
+    "correctOptionIndex": 1,
+    "explanation": "Cách mạng Tháng Tám giành chính quyền trên cả nước vào năm 1945."
+  },
+  {
+    "questionNumber": 4,
+    "questionText": "Chiến thắng Điện Biên Phủ diễn ra vào năm nào?",
+    "options": [
+      { "text": "Năm 1950" },
+      { "text": "Năm 1954" },
+      { "text": "Năm 1968" },
+      { "text": "Năm 1975" }
+    ],
+    "correctOptionIndex": 1,
+    "explanation": "Chiến thắng Điện Biên Phủ kết thúc ngày 07/05/1954."
+  },
+  {
+    "questionNumber": 5,
+    "questionText": "Đại thắng mùa Xuân, giải phóng hoàn toàn miền Nam diễn ra năm nào?",
+    "options": [
+      { "text": "Năm 1972" },
+      { "text": "Năm 1973" },
+      { "text": "Năm 1975" },
+      { "text": "Năm 1979" }
+    ],
+    "correctOptionIndex": 2,
+    "explanation": "Chiến dịch Hồ Chí Minh toàn thắng vào ngày 30/04/1975."
+  }
+]

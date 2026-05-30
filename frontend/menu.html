@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu | Lịch sử Đảng Quiz</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card">
+        <h1>🐱 Chào mừng <span id="username-display"></span></h1>
+        <p class="subtitle">Chọn dải câu hỏi để làm bài nhé 🌸</p>
+
+        <div class="range-grid">
+          <button class="secondary-button range-button" data-start="10" data-end="50">10 - 50</button>
+          <button class="secondary-button range-button" data-start="50" data-end="100">50 - 100</button>
+          <button class="secondary-button range-button" data-start="1" data-end="300">Toàn bộ 1 - 300</button>
+        </div>
+
+        <div class="menu-actions">
+          <a class="primary-button link-button" href="./leaderboard.html">Bảng Xếp Hạng Toàn Hệ Thống</a>
+          <button id="logout-button" class="danger-button">Đăng xuất</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="./scripts/api.js"></script>
+    <script src="./scripts/menu.js"></script>
+  </body>
+  </html>
