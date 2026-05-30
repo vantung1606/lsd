@@ -52,6 +52,29 @@ function getDatabase() {
 async function initializeSchema() {
   const database = getDatabase();
 
+  // Helper: get column type info
+  async function getColumnType(tableName, columnName) {
+    const [rows] = await database.query(
+      `SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+      [tableName, columnName]
+    );
+    return rows.length > 0 ? rows[0].COLUMN_TYPE : null;
+  }
+
+  // Helper: drop foreign keys on a table
+  async function dropAllForeignKeys(tableName) {
+    const [fks] = await database.query(
+      `SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND CONSTRAINT_TYPE = 'FOREIGN KEY'`,
+      [tableName]
+    );
+    for (const fk of fks) {
+      await database.query(`ALTER TABLE \`${tableName}\` DROP FOREIGN KEY \`${fk.CONSTRAINT_NAME}\``);
+    }
+  }
+
+  // Create users table
   await database.query(`
     CREATE TABLE IF NOT EXISTS users (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -64,6 +87,7 @@ async function initializeSchema() {
     )
   `);
 
+  // Create questions table
   await database.query(`
     CREATE TABLE IF NOT EXISTS questions (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -78,6 +102,44 @@ async function initializeSchema() {
     )
   `);
 
+  // Check if users.id type is compatible with INT for foreign keys
+  const usersIdType = await getColumnType("users", "id");
+  if (usersIdType && usersIdType.toLowerCase() !== "int") {
+    console.log(`Fixing users.id type: ${usersIdType} -> int`);
+    // Drop dependent tables first (they reference users.id)
+    const [quizAnswersExists] = await database.query(
+      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'quiz_answers'`
+    );
+    if (quizAnswersExists.length > 0) {
+      await dropAllForeignKeys("quiz_answers");
+      await database.query(`DROP TABLE quiz_answers`);
+    }
+    const [quizAttemptsExists] = await database.query(
+      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'quiz_attempts'`
+    );
+    if (quizAttemptsExists.length > 0) {
+      await dropAllForeignKeys("quiz_attempts");
+      await database.query(`DROP TABLE quiz_attempts`);
+    }
+    // Alter users.id to INT
+    await database.query(`ALTER TABLE users MODIFY id INT AUTO_INCREMENT`);
+  }
+
+  // Check if questions.id type is compatible
+  const questionsIdType = await getColumnType("questions", "id");
+  if (questionsIdType && questionsIdType.toLowerCase() !== "int") {
+    console.log(`Fixing questions.id type: ${questionsIdType} -> int`);
+    const [quizAnswersExists] = await database.query(
+      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'quiz_answers'`
+    );
+    if (quizAnswersExists.length > 0) {
+      await dropAllForeignKeys("quiz_answers");
+      await database.query(`DROP TABLE quiz_answers`);
+    }
+    await database.query(`ALTER TABLE questions MODIFY id INT AUTO_INCREMENT`);
+  }
+
+  // Create quiz_attempts (with FK to users)
   await database.query(`
     CREATE TABLE IF NOT EXISTS quiz_attempts (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -92,6 +154,16 @@ async function initializeSchema() {
     )
   `);
 
+  // Check quiz_attempts.user_id compatibility
+  const userIdType = await getColumnType("quiz_attempts", "user_id");
+  if (userIdType && userIdType.toLowerCase() !== "int") {
+    console.log(`Fixing quiz_attempts.user_id type: ${userIdType} -> int`);
+    await dropAllForeignKeys("quiz_attempts");
+    await database.query(`ALTER TABLE quiz_attempts MODIFY user_id INT NOT NULL`);
+    await database.query(`ALTER TABLE quiz_attempts ADD FOREIGN KEY (user_id) REFERENCES users(id)`);
+  }
+
+  // Create quiz_answers (with FKs to quiz_attempts and questions)
   await database.query(`
     CREATE TABLE IF NOT EXISTS quiz_answers (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -103,6 +175,8 @@ async function initializeSchema() {
       FOREIGN KEY (question_id) REFERENCES questions(id)
     )
   `);
+
+  console.log("Database schema initialized successfully.");
 }
 
 module.exports = {
