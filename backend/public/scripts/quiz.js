@@ -247,6 +247,7 @@ const optionsContainer = document.getElementById("options-container");
 const explanationBox = document.getElementById("explanation-box");
 const nextButton = document.getElementById("next-button");
 const prevButton = document.getElementById("prev-button");
+const giantNextButton = document.getElementById("giant-next-button");
 
 let questions = [];
 let currentIndex = 0;
@@ -276,6 +277,9 @@ function renderQuestion() {
   optionsContainer.innerHTML = "";
   explanationBox.classList.add("hidden");
   nextButton.classList.add("hidden");
+  if (giantNextButton) {
+    giantNextButton.classList.add("hidden");
+  }
 
   // Show/Hide back button
   if (prevButton) {
@@ -317,10 +321,15 @@ function renderQuestion() {
     explanationBox.textContent = `Giải thích: ${question.explanation}`;
     explanationBox.classList.remove("hidden");
     nextButton.classList.remove("hidden");
+    if (giantNextButton) {
+      giantNextButton.classList.remove("hidden");
+    }
     if (currentIndex === questions.length - 1) {
       nextButton.textContent = "Nộp bài 🏁";
+      if (giantNextButton) giantNextButton.textContent = "Nộp bài 🏁";
     } else {
       nextButton.textContent = "Câu tiếp theo ➜";
+      if (giantNextButton) giantNextButton.textContent = "Câu tiếp theo ➜";
     }
   }
 }
@@ -356,10 +365,15 @@ function handleAnswer(question, selectedOptionIndex) {
   explanationBox.textContent = `Giải thích: ${question.explanation}`;
   explanationBox.classList.remove("hidden");
   nextButton.classList.remove("hidden");
+  if (giantNextButton) {
+    giantNextButton.classList.remove("hidden");
+  }
   if (currentIndex === questions.length - 1) {
     nextButton.textContent = "Nộp bài 🏁";
+    if (giantNextButton) giantNextButton.textContent = "Nộp bài 🏁";
   } else {
     nextButton.textContent = "Câu tiếp theo ➜";
+    if (giantNextButton) giantNextButton.textContent = "Câu tiếp theo ➜";
   }
 }
 
@@ -401,6 +415,17 @@ nextButton.addEventListener("click", async () => {
     await submitQuiz();
   }
 });
+
+if (giantNextButton) {
+  giantNextButton.addEventListener("click", async () => {
+    if (currentIndex < questions.length - 1) {
+      currentIndex += 1;
+      renderQuestion();
+    } else {
+      await submitQuiz();
+    }
+  });
+}
 
 if (prevButton) {
   prevButton.addEventListener("click", () => {
