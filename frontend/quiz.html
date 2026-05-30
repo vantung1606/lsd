@@ -4,21 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Làm bài | Lịch sử Đảng Quiz</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=8" />
   </head>
   <body>
     <main class="page">
-      <section class="card scrollable" style="position: relative;">
+      <section class="card scrollable">
         <button id="music-toggle" class="music-toggle-btn" title="Bật/Tắt nhạc nền">🎵</button>
-        <h1>🎀 Làm bài Quiz</h1>
-        <p class="subtitle" id="quiz-progress"></p>
-        <h2 id="question-text"></h2>
+        
+        <div class="quiz-header-section">
+          <h1 id="quiz-section-title">Bộ câu hỏi</h1>
+          <div id="quiz-question-number-header">Câu hỏi</div>
+        </div>
 
-        <div id="options-container" class="options"></div>
+        <div class="question-container-box">
+          <div class="decor-star star-1">⭐</div>
+          <div class="decor-star star-2">⭐</div>
+          <div class="decor-star star-3">⭐</div>
+          <div class="decor-stitch-waving"></div>
+          <div class="decor-coconut-drink">🥥</div>
+          <h2 id="question-text"></h2>
+        </div>
+
+        <div id="options-container" class="options-grid"></div>
 
         <div id="explanation-box" class="explanation hidden"></div>
 
-        <button id="next-button" class="primary-button hidden">Tiếp theo ➜</button>
+        <div class="quiz-navigation">
+          <button id="prev-button" class="nav-button prev-btn hidden">← Câu trước</button>
+          <button id="next-button" class="primary-button hidden">Câu tiếp theo ➜</button>
+        </div>
       </section>
     </main>
 

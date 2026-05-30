@@ -241,30 +241,88 @@ if (!sectionRaw || !getToken()) {
 
 const selectedSection = JSON.parse(sectionRaw);
 const questionText = document.getElementById("question-text");
-const progressText = document.getElementById("quiz-progress");
+const sectionTitleText = document.getElementById("quiz-section-title");
+const questionHeaderNumber = document.getElementById("quiz-question-number-header");
 const optionsContainer = document.getElementById("options-container");
 const explanationBox = document.getElementById("explanation-box");
 const nextButton = document.getElementById("next-button");
+const prevButton = document.getElementById("prev-button");
 
 let questions = [];
 let currentIndex = 0;
-let answers = [];
+let answers = []; // Indexed by question index to support back navigation cleanly
+
+function addFeedbackText(button, isCorrect) {
+  if (button.querySelector(".feedback-text")) return;
+  const feedback = document.createElement("div");
+  feedback.className = "feedback-text";
+  feedback.textContent = isCorrect ? "Câu trả lời đúng! 💙" : "Bạn chọn sai rồi! 😢";
+  button.appendChild(feedback);
+}
 
 function renderQuestion() {
   const question = questions[currentIndex];
-  progressText.textContent = `Câu ${currentIndex + 1}/${questions.length} | ${selectedSection.label}`;
-  questionText.textContent = `${question.questionNumber}. ${question.questionText}`;
+  
+  // Set header texts to match Stitch quiz theme
+  if (sectionTitleText) {
+    sectionTitleText.textContent = `Bộ câu hỏi: ${selectedSection.label}`;
+  }
+  if (questionHeaderNumber) {
+    questionHeaderNumber.textContent = `Câu ${currentIndex + 1} / ${questions.length}`;
+  }
+  
+  // Clean question text
+  questionText.textContent = question.questionText;
   optionsContainer.innerHTML = "";
   explanationBox.classList.add("hidden");
   nextButton.classList.add("hidden");
+
+  // Show/Hide back button
+  if (prevButton) {
+    if (currentIndex > 0) {
+      prevButton.classList.remove("hidden");
+    } else {
+      prevButton.classList.add("hidden");
+    }
+  }
+
+  // Check if this question was already answered
+  const previousAnswer = answers[currentIndex];
 
   question.options.forEach((option, optionIndex) => {
     const button = document.createElement("button");
     button.className = "option-button";
     button.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option.text}`;
-    button.addEventListener("click", () => handleAnswer(question, optionIndex));
+    
+    if (previousAnswer !== undefined) {
+      // Question already answered: disable and highlight
+      button.classList.add("disabled");
+      if (optionIndex === question.correctOptionIndex) {
+        button.classList.add("correct");
+        addFeedbackText(button, true);
+      }
+      if (optionIndex === previousAnswer.selectedOptionIndex && optionIndex !== question.correctOptionIndex) {
+        button.classList.add("wrong");
+        addFeedbackText(button, false);
+      }
+    } else {
+      // Normal state
+      button.addEventListener("click", () => handleAnswer(question, optionIndex));
+    }
     optionsContainer.appendChild(button);
   });
+
+  // If already answered, show explanation and next button
+  if (previousAnswer !== undefined) {
+    explanationBox.textContent = `Giải thích: ${question.explanation}`;
+    explanationBox.classList.remove("hidden");
+    nextButton.classList.remove("hidden");
+    if (currentIndex === questions.length - 1) {
+      nextButton.textContent = "Nộp bài 🏁";
+    } else {
+      nextButton.textContent = "Câu tiếp theo ➜";
+    }
+  }
 }
 
 function handleAnswer(question, selectedOptionIndex) {
@@ -281,20 +339,28 @@ function handleAnswer(question, selectedOptionIndex) {
     button.classList.add("disabled");
     if (index === question.correctOptionIndex) {
       button.classList.add("correct");
+      addFeedbackText(button, true);
     }
     if (index === selectedOptionIndex && !isCorrect) {
       button.classList.add("wrong");
+      addFeedbackText(button, false);
     }
   });
 
-  answers.push({
+  // Store answer by index to avoid duplicates
+  answers[currentIndex] = {
     questionId: question._id,
     selectedOptionIndex
-  });
+  };
 
   explanationBox.textContent = `Giải thích: ${question.explanation}`;
   explanationBox.classList.remove("hidden");
   nextButton.classList.remove("hidden");
+  if (currentIndex === questions.length - 1) {
+    nextButton.textContent = "Nộp bài 🏁";
+  } else {
+    nextButton.textContent = "Câu tiếp theo ➜";
+  }
 }
 
 async function submitQuiz() {
@@ -302,7 +368,7 @@ async function submitQuiz() {
     bgMusic.stop(); // Stop music when quiz completes
     const payload = {
       sectionKey: selectedSection.key,
-      answers
+      answers: answers.filter(a => a !== undefined)
     };
 
     if (selectedSection.type === "range") {
@@ -335,6 +401,15 @@ nextButton.addEventListener("click", async () => {
     await submitQuiz();
   }
 });
+
+if (prevButton) {
+  prevButton.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex -= 1;
+      renderQuestion();
+    }
+  });
+}
 
 async function initQuiz() {
   try {
