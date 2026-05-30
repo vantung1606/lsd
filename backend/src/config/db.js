@@ -63,15 +63,22 @@ async function initializeSchema() {
       console.log(`Dropped table if existed: ${table}`);
     }
 
-    // Drop and recreate users table to ensure correct column types
-    // Check if users table exists and has wrong column type
-    const [usersExists] = await database.query(
+    // Check if users table exists but has incompatible schema (wrong id type OR missing columns)
+    const [usersIdCheck] = await database.query(
       `SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS
        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'id'`
     );
+    const [passwordHashCheck] = await database.query(
+      `SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'password_hash'`
+    );
 
-    if (usersExists.length > 0 && usersExists[0].COLUMN_TYPE.toLowerCase() !== "int") {
-      console.log(`Users table has incompatible id type: ${usersExists[0].COLUMN_TYPE}, dropping and recreating`);
+    const needsRecreate =
+      (usersIdCheck.length > 0 && usersIdCheck[0].COLUMN_TYPE.toLowerCase() !== "int") ||
+      (usersIdCheck.length > 0 && passwordHashCheck.length === 0);
+
+    if (needsRecreate) {
+      console.log("Users table has incompatible schema, dropping and recreating");
       await database.query(`DROP TABLE IF EXISTS users`);
     }
 
