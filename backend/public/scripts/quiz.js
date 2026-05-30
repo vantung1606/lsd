@@ -16,7 +16,7 @@ let answers = [];
 
 function renderQuestion() {
   const question = questions[currentIndex];
-  progressText.textContent = `Cau ${currentIndex + 1}/${questions.length} | ${selectedSection.label}`;
+  progressText.textContent = `Câu ${currentIndex + 1}/${questions.length} | ${selectedSection.label}`;
   questionText.textContent = `${question.questionNumber}. ${question.questionText}`;
   optionsContainer.innerHTML = "";
   explanationBox.classList.add("hidden");
@@ -50,7 +50,7 @@ function handleAnswer(question, selectedOptionIndex) {
     selectedOptionIndex
   });
 
-  explanationBox.textContent = `Giai thich: ${question.explanation}`;
+  explanationBox.textContent = `Giải thích: ${question.explanation}`;
   explanationBox.classList.remove("hidden");
   nextButton.classList.remove("hidden");
 }
@@ -72,7 +72,7 @@ async function submitQuiz() {
 
     const result = await apiRequest("/quiz/submit", "POST", payload);
     alert(
-      `Hoan thanh ${selectedSection.label}! Ban dung ${result.result.correctAnswers}/${result.result.totalQuestions} cau.`
+      `Hoàn thành ${selectedSection.label}! Bạn đúng ${result.result.correctAnswers}/${result.result.totalQuestions} câu.`
     );
     window.location.href = `./leaderboard.html?sectionKey=${encodeURIComponent(selectedSection.key)}`;
   } catch (error) {
@@ -94,7 +94,7 @@ async function initQuiz() {
     const data = await apiRequest(`/questions?sectionKey=${encodeURIComponent(selectedSection.key)}`);
     questions = data.questions || [];
     if (!questions.length) {
-      alert("Khong co cau hoi trong phan da chon.");
+      alert("Không có câu hỏi trong phần đã chọn.");
       window.location.href = "./menu.html";
       return;
     }

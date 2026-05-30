@@ -22,7 +22,7 @@ async function loadSections() {
   sectionSelect.innerHTML = "";
   const globalOption = document.createElement("option");
   globalOption.value = "global";
-  globalOption.textContent = "Toan he thong";
+  globalOption.textContent = "Toàn hệ thống";
   sectionSelect.appendChild(globalOption);
 
   sections.forEach((section) => {
