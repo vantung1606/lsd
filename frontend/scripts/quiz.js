@@ -21,7 +21,7 @@ class BackgroundMusic {
     this.audioCtx = ctx;
     if (!this.gainNode) {
       this.gainNode = this.audioCtx.createGain();
-      this.gainNode.gain.setValueAtTime(0.08, this.audioCtx.currentTime); // Soft 8% volume
+      this.gainNode.gain.setValueAtTime(0.25, this.audioCtx.currentTime); // 25% volume
       this.gainNode.connect(this.audioCtx.destination);
     }
   }
