@@ -1,3 +1,75 @@
+class BackgroundMusic {
+  constructor() {
+    this.audioCtx = null;
+    this.isPlaying = false;
+    this.tempo = 120; // BPM
+    this.beatDuration = 60 / this.tempo;
+    this.timerId = null;
+    this.currentStep = 0;
+    this.gainNode = null;
+
+    // Cute retro chord progression C -> G -> Am -> F arpeggios
+    this.melody = [
+      261.63, 329.63, 392.00, 523.25, // C
+      293.66, 392.00, 493.88, 587.33, // G
+      329.63, 440.00, 523.25, 659.25, // Am
+      349.23, 440.00, 523.25, 698.46  // F
+    ];
+  }
+
+  init(ctx) {
+    this.audioCtx = ctx;
+    if (!this.gainNode) {
+      this.gainNode = this.audioCtx.createGain();
+      this.gainNode.gain.setValueAtTime(0.015, this.audioCtx.currentTime); // Soft 1.5% volume
+      this.gainNode.connect(this.audioCtx.destination);
+    }
+  }
+
+  start() {
+    if (this.isPlaying) return;
+    this.isPlaying = true;
+    this.currentStep = 0;
+    this.scheduler();
+  }
+
+  stop() {
+    this.isPlaying = false;
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+  }
+
+  scheduler() {
+    if (!this.isPlaying) return;
+
+    const ctx = this.audioCtx;
+    const now = ctx.currentTime;
+
+    const freq = this.melody[this.currentStep % this.melody.length];
+    if (freq > 0) {
+      const osc = ctx.createOscillator();
+      const noteGain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now);
+
+      noteGain.gain.setValueAtTime(0.3, now);
+      noteGain.gain.exponentialRampToValueAtTime(0.001, now + this.beatDuration - 0.05);
+
+      osc.connect(noteGain);
+      noteGain.connect(this.gainNode);
+
+      osc.start(now);
+      osc.stop(now + this.beatDuration);
+    }
+
+    this.currentStep += 1;
+    this.timerId = setTimeout(() => this.scheduler(), this.beatDuration * 1000);
+  }
+}
+
 class QuizSoundManager {
   constructor() {
     this.audioCtx = null;
@@ -133,7 +205,34 @@ class QuizSoundManager {
 }
 
 const sounds = new QuizSoundManager();
-document.addEventListener("click", () => sounds.init(), { once: true });
+const bgMusic = new BackgroundMusic();
+
+function toggleMusic() {
+  sounds.init();
+  bgMusic.init(sounds.audioCtx);
+
+  const btn = document.getElementById("music-toggle");
+  if (bgMusic.isPlaying) {
+    bgMusic.stop();
+    if (btn) btn.classList.remove("playing");
+    localStorage.setItem("bg_music_disabled", "true");
+  } else {
+    bgMusic.start();
+    if (btn) btn.classList.add("playing");
+    localStorage.removeItem("bg_music_disabled");
+  }
+}
+
+document.addEventListener("click", () => {
+  sounds.init();
+  bgMusic.init(sounds.audioCtx);
+  const musicDisabled = localStorage.getItem("bg_music_disabled") === "true";
+  if (!musicDisabled && !bgMusic.isPlaying) {
+    bgMusic.start();
+    const btn = document.getElementById("music-toggle");
+    if (btn) btn.classList.add("playing");
+  }
+}, { once: true });
 
 const sectionRaw = localStorage.getItem("quiz_section");
 if (!sectionRaw || !getToken()) {
@@ -200,6 +299,7 @@ function handleAnswer(question, selectedOptionIndex) {
 
 async function submitQuiz() {
   try {
+    bgMusic.stop(); // Stop music when quiz completes
     const payload = {
       sectionKey: selectedSection.key,
       answers
@@ -251,6 +351,14 @@ async function initQuiz() {
     alert(error.message);
     window.location.href = "./menu.html";
   }
+}
+
+const musicToggleBtn = document.getElementById("music-toggle");
+if (musicToggleBtn) {
+  musicToggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMusic();
+  });
 }
 
 initQuiz();

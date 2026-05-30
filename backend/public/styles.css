@@ -507,3 +507,42 @@ input:focus {
   background: var(--pink-300);
   border-radius: 4px;
 }
+
+/* ===== MUSIC TOGGLE ===== */
+.music-toggle-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: var(--pink-200);
+  border: 1.5px solid var(--pink-400);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(255, 95, 168, 0.15);
+  outline: none;
+}
+
+.music-toggle-btn:hover {
+  transform: scale(1.1);
+  background: var(--pink-300);
+}
+
+.music-toggle-btn.playing {
+  background: var(--pink-500);
+  color: var(--white);
+  border-color: var(--pink-600);
+  box-shadow: 0 2px 10px rgba(255, 95, 168, 0.35);
+  animation: pulseMusic 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseMusic {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
