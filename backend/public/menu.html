@@ -3,39 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Menu | Lịch sử Đảng Quiz</title>
+    <title>Menu | Lich su Dang Quiz</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="page">
-      <section class="card">
-        <h1>🐱 Chào <span id="username-display"></span>!</h1>
-        <p class="subtitle">Chọn dải câu hỏi để làm bài nhé 🌸</p>
+      <section class="card scrollable">
+        <h1>Hello <span id="username-display"></span></h1>
+        <p class="subtitle">Chon phan de lam bai va dua top</p>
 
         <div class="stats-bar">
           <div class="stat-item">
             <div class="stat-value" id="stat-score">0</div>
-            <div class="stat-label">Tổng điểm</div>
+            <div class="stat-label">Tong diem</div>
           </div>
           <div class="stat-item">
             <div class="stat-value" id="stat-correct">0</div>
-            <div class="stat-label">Câu đúng</div>
+            <div class="stat-label">Tong dung</div>
           </div>
           <div class="stat-item">
             <div class="stat-value" id="stat-attempts">0</div>
-            <div class="stat-label">Lượt chơi</div>
+            <div class="stat-label">Luot choi</div>
           </div>
         </div>
 
-        <div class="range-grid">
-          <button class="secondary-button range-button" data-start="10" data-end="50">📖 10 - 50</button>
-          <button class="secondary-button range-button" data-start="50" data-end="100">📚 50 - 100</button>
-          <button class="secondary-button range-button" data-start="1" data-end="300">🏆 Toàn bộ 1 - 300</button>
-        </div>
+        <h2 class="menu-section-title">Bo cau hoi theo dai</h2>
+        <div class="range-grid" id="range-sections"></div>
+
+        <h2 class="menu-section-title">6 de thi thu (moi de 60 cau)</h2>
+        <div class="range-grid" id="mock-sections"></div>
 
         <div class="menu-actions">
-          <a class="primary-button link-button" href="./leaderboard.html">🏅 Bảng Xếp Hạng</a>
-          <button id="logout-button" class="danger-button">Đăng xuất</button>
+          <a class="primary-button link-button" href="./leaderboard.html">Bang xep hang</a>
+          <button id="logout-button" class="danger-button">Dang xuat</button>
         </div>
       </section>
     </main>

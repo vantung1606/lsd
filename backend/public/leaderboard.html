@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Bảng xếp hạng | Lịch sử Đảng Quiz</title>
+    <title>Bang xep hang | Lich su Dang Quiz</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="page">
       <section class="card scrollable">
-        <h1>🏆 Bảng Xếp Hạng</h1>
+        <h1>Bang xep hang</h1>
+        <p class="subtitle">Moi phan co mot bang xep hang rieng</p>
+
+        <div class="leaderboard-filters">
+          <label for="section-select">Phan thi:</label>
+          <select id="section-select"></select>
+        </div>
 
         <div class="leaderboard-actions">
           <button id="top10-button" class="secondary-button">Top 10</button>
@@ -21,17 +27,17 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Người chơi</th>
-                <th>Đúng</th>
-                <th>Điểm</th>
-                <th>Lượt</th>
+                <th>Nguoi choi</th>
+                <th>Dung</th>
+                <th>Diem</th>
+                <th>Luot</th>
               </tr>
             </thead>
             <tbody id="leaderboard-body"></tbody>
           </table>
         </div>
 
-        <a class="primary-button link-button back-link" href="./menu.html">← Về Menu</a>
+        <a class="primary-button link-button back-link" href="./menu.html">Ve Menu</a>
       </section>
     </main>
 

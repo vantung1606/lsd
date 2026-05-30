@@ -1,24 +1,45 @@
 const express = require("express");
 const requireAuth = require("../middleware/authMiddleware");
 const { getDatabase } = require("../config/db");
+const { getSectionByKey } = require("../config/quizSections");
 
 const router = express.Router();
 
 router.post("/submit", requireAuth, async (request, response) => {
   try {
-    const { start, end, answers } = request.body;
+    const { start, end, answers, sectionKey } = request.body;
+    const section = sectionKey ? getSectionByKey(sectionKey) : null;
 
-    if (!Number.isInteger(start) || !Number.isInteger(end) || !Array.isArray(answers)) {
+    if (!Array.isArray(answers) || answers.length === 0) {
       return response.status(400).json({ message: "Invalid payload." });
+    }
+
+    let rangeStart = Number.isInteger(start) ? start : 1;
+    let rangeEnd = Number.isInteger(end) ? end : 300;
+    let normalizedSectionKey = "range-1-300";
+    let sectionLabel = "1 - 300";
+    let sectionType = "range";
+
+    if (section) {
+      normalizedSectionKey = section.key;
+      sectionLabel = section.label;
+      sectionType = section.type;
+      if (section.type === "range") {
+        rangeStart = section.start;
+        rangeEnd = section.end;
+      } else {
+        rangeStart = 1;
+        rangeEnd = 300;
+      }
+    } else if (Number.isInteger(start) && Number.isInteger(end)) {
+      normalizedSectionKey = `range-${start}-${end}`;
+      sectionLabel = `${start} - ${end}`;
     }
 
     const database = getDatabase();
     const questionIds = answers.map((item) => Number(item.questionId)).filter(Number.isInteger);
-    if (questionIds.length === 0) {
-      return response.status(400).json({ message: "No valid answers submitted." });
-    }
-
     const placeholders = questionIds.map(() => "?").join(", ");
+
     const [questions] = await database.query(
       `
       SELECT id, correct_option_index
@@ -30,32 +51,49 @@ router.post("/submit", requireAuth, async (request, response) => {
     const questionMap = new Map(questions.map((question) => [Number(question.id), question]));
 
     let correctAnswers = 0;
-    const normalizedAnswers = answers.map((answer) => {
-      const questionId = Number(answer.questionId);
-      const question = questionMap.get(questionId);
-      if (!question) {
-        return null;
-      }
-      const isCorrect = question.correct_option_index === answer.selectedOptionIndex;
-      if (isCorrect) {
-        correctAnswers += 1;
-      }
-      return {
-        questionId,
-        selectedOptionIndex: answer.selectedOptionIndex,
-        isCorrect
-      };
-    }).filter(Boolean);
+    const normalizedAnswers = answers
+      .map((answer) => {
+        const questionId = Number(answer.questionId);
+        const selectedOptionIndex = Number(answer.selectedOptionIndex);
+        const question = questionMap.get(questionId);
+
+        if (!question || !Number.isInteger(selectedOptionIndex)) {
+          return null;
+        }
+
+        const isCorrect = question.correct_option_index === selectedOptionIndex;
+        if (isCorrect) {
+          correctAnswers += 1;
+        }
+
+        return {
+          questionId,
+          selectedOptionIndex,
+          isCorrect
+        };
+      })
+      .filter(Boolean);
 
     const totalQuestions = normalizedAnswers.length;
     const score = correctAnswers;
 
     const [attemptResult] = await database.query(
       `
-      INSERT INTO quiz_attempts (user_id, range_start, range_end, total_questions, correct_answers, score)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO quiz_attempts
+      (user_id, range_start, range_end, total_questions, correct_answers, score, section_key, section_label, section_type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [request.user.userId, start, end, totalQuestions, correctAnswers, score]
+      [
+        request.user.userId,
+        rangeStart,
+        rangeEnd,
+        totalQuestions,
+        correctAnswers,
+        score,
+        normalizedSectionKey,
+        sectionLabel,
+        sectionType
+      ]
     );
     const attemptId = attemptResult.insertId;
 
@@ -90,6 +128,8 @@ router.post("/submit", requireAuth, async (request, response) => {
       message: "Quiz submitted successfully.",
       result: {
         attemptId,
+        sectionKey: normalizedSectionKey,
+        sectionLabel,
         totalQuestions,
         correctAnswers,
         score

@@ -1,9 +1,9 @@
-const rangeRaw = localStorage.getItem("quiz_range");
-if (!rangeRaw || !getToken()) {
+const sectionRaw = localStorage.getItem("quiz_section");
+if (!sectionRaw || !getToken()) {
   window.location.href = "./menu.html";
 }
 
-const selectedRange = JSON.parse(rangeRaw);
+const selectedSection = JSON.parse(sectionRaw);
 const questionText = document.getElementById("question-text");
 const progressText = document.getElementById("quiz-progress");
 const optionsContainer = document.getElementById("options-container");
@@ -16,7 +16,7 @@ let answers = [];
 
 function renderQuestion() {
   const question = questions[currentIndex];
-  progressText.textContent = `Câu ${currentIndex + 1}/${questions.length} | Dải ${selectedRange.start}-${selectedRange.end}`;
+  progressText.textContent = `Cau ${currentIndex + 1}/${questions.length} | ${selectedSection.label}`;
   questionText.textContent = `${question.questionNumber}. ${question.questionText}`;
   optionsContainer.innerHTML = "";
   explanationBox.classList.add("hidden");
@@ -50,20 +50,31 @@ function handleAnswer(question, selectedOptionIndex) {
     selectedOptionIndex
   });
 
-  explanationBox.textContent = `Giải thích: ${question.explanation}`;
+  explanationBox.textContent = `Giai thich: ${question.explanation}`;
   explanationBox.classList.remove("hidden");
   nextButton.classList.remove("hidden");
 }
 
 async function submitQuiz() {
   try {
-    const result = await apiRequest("/quiz/submit", "POST", {
-      start: selectedRange.start,
-      end: selectedRange.end,
+    const payload = {
+      sectionKey: selectedSection.key,
       answers
-    });
-    alert(`Hoàn thành! Bạn đúng ${result.result.correctAnswers}/${result.result.totalQuestions} câu.`);
-    window.location.href = "./leaderboard.html";
+    };
+
+    if (selectedSection.type === "range") {
+      payload.start = selectedSection.start;
+      payload.end = selectedSection.end;
+    } else {
+      payload.start = 1;
+      payload.end = 300;
+    }
+
+    const result = await apiRequest("/quiz/submit", "POST", payload);
+    alert(
+      `Hoan thanh ${selectedSection.label}! Ban dung ${result.result.correctAnswers}/${result.result.totalQuestions} cau.`
+    );
+    window.location.href = `./leaderboard.html?sectionKey=${encodeURIComponent(selectedSection.key)}`;
   } catch (error) {
     alert(error.message);
   }
@@ -80,12 +91,10 @@ nextButton.addEventListener("click", async () => {
 
 async function initQuiz() {
   try {
-    const data = await apiRequest(
-      `/questions?start=${selectedRange.start}&end=${selectedRange.end}`
-    );
-    questions = data.questions;
+    const data = await apiRequest(`/questions?sectionKey=${encodeURIComponent(selectedSection.key)}`);
+    questions = data.questions || [];
     if (!questions.length) {
-      alert("Không có câu hỏi trong dải đã chọn.");
+      alert("Khong co cau hoi trong phan da chon.");
       window.location.href = "./menu.html";
       return;
     }
