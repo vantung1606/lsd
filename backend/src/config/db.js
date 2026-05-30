@@ -1,14 +1,39 @@
 const mysql = require("mysql2/promise");
+const { URL } = require("url");
 
 let pool;
 
+function getDatabaseConfig() {
+  const databaseUrl = process.env.DATABASE_URL || process.env.DB_URL || process.env.MYSQL_URL;
+
+  if (databaseUrl) {
+    const parsedUrl = new URL(databaseUrl);
+    return {
+      host: parsedUrl.hostname,
+      port: Number(parsedUrl.port || 3306),
+      user: decodeURIComponent(parsedUrl.username),
+      password: decodeURIComponent(parsedUrl.password),
+      database: parsedUrl.pathname.replace("/", "")
+    };
+  }
+
+  return {
+    host: process.env.DB_HOST || process.env.MYSQLHOST,
+    port: Number(process.env.DB_PORT || process.env.MYSQLPORT || 3306),
+    user: process.env.DB_USER || process.env.DB_USERNAME || process.env.MYSQLUSER,
+    password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD,
+    database: process.env.DB_NAME || process.env.MYSQLDATABASE
+  };
+}
+
 async function connectDatabase() {
+  const config = getDatabaseConfig();
   pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT || 3306),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
+    database: config.database,
     waitForConnections: true,
     connectionLimit: 10
   });
