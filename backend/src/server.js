@@ -20,7 +20,7 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 
-const frontendPath = path.join(__dirname, "../../frontend");
+const frontendPath = path.join(__dirname, "../public");
 app.use(express.static(frontendPath));
 
 app.get("*", (request, response) => {
@@ -42,3 +42,4 @@ async function startServer() {
 }
 
 startServer();
+
