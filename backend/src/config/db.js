@@ -62,7 +62,7 @@ async function initializeSchema() {
     return rows.length > 0 ? rows[0].COLUMN_TYPE : null;
   }
 
-  // Helper: drop foreign keys on a table
+  // Helper: drop ALL foreign keys on a specific table
   async function dropAllForeignKeys(tableName) {
     const [fks] = await database.query(
       `SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
@@ -71,6 +71,47 @@ async function initializeSchema() {
     );
     for (const fk of fks) {
       await database.query(`ALTER TABLE \`${tableName}\` DROP FOREIGN KEY \`${fk.CONSTRAINT_NAME}\``);
+    }
+  }
+
+  // Helper: find all FKs referencing a given table.column across ALL tables in the DB, then drop them
+  async function dropAllReferencingForeignKeys(referencedTable, referencedColumn) {
+    const [refs] = await database.query(
+      `SELECT kcu.TABLE_NAME, kcu.CONSTRAINT_NAME
+       FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+       JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+         ON tc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME
+         AND tc.TABLE_SCHEMA = kcu.TABLE_SCHEMA
+         AND tc.TABLE_NAME = kcu.TABLE_NAME
+       WHERE kcu.TABLE_SCHEMA = DATABASE()
+         AND kcu.REFERENCED_TABLE_NAME = ?
+         AND kcu.REFERENCED_COLUMN_NAME = ?
+         AND tc.CONSTRAINT_TYPE = 'FOREIGN KEY'`,
+      [referencedTable, referencedColumn]
+    );
+    for (const ref of refs) {
+      console.log(`  Dropping FK ${ref.CONSTRAINT_NAME} on ${ref.TABLE_NAME}`);
+      await database.query(`ALTER TABLE \`${ref.TABLE_NAME}\` DROP FOREIGN KEY \`${ref.CONSTRAINT_NAME}\``);
+    }
+    return refs;
+  }
+
+  // Helper: check if a table exists
+  async function tableExists(tableName) {
+    const [rows] = await database.query(
+      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?`,
+      [tableName]
+    );
+    return rows.length > 0;
+  }
+
+  // Drop legacy tables from old project that are NOT part of current schema
+  const legacyTables = ["transactions", "budgets", "categories"];
+  for (const legacyTable of legacyTables) {
+    if (await tableExists(legacyTable)) {
+      console.log(`Dropping legacy table: ${legacyTable}`);
+      await dropAllForeignKeys(legacyTable);
+      await database.query(`DROP TABLE \`${legacyTable}\``);
     }
   }
 
@@ -102,40 +143,39 @@ async function initializeSchema() {
     )
   `);
 
-  // Check if users.id type is compatible with INT for foreign keys
+  // Fix users.id type if needed (must drop ALL referencing FKs from ANY table first)
   const usersIdType = await getColumnType("users", "id");
   if (usersIdType && usersIdType.toLowerCase() !== "int") {
     console.log(`Fixing users.id type: ${usersIdType} -> int`);
-    // Drop dependent tables first (they reference users.id)
-    const [quizAnswersExists] = await database.query(
-      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'quiz_answers'`
-    );
-    if (quizAnswersExists.length > 0) {
+
+    // Drop ALL foreign keys from ANY table that references users.id
+    await dropAllReferencingForeignKeys("users", "id");
+
+    // Drop quiz tables that we'll recreate
+    if (await tableExists("quiz_answers")) {
       await dropAllForeignKeys("quiz_answers");
       await database.query(`DROP TABLE quiz_answers`);
     }
-    const [quizAttemptsExists] = await database.query(
-      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'quiz_attempts'`
-    );
-    if (quizAttemptsExists.length > 0) {
+    if (await tableExists("quiz_attempts")) {
       await dropAllForeignKeys("quiz_attempts");
       await database.query(`DROP TABLE quiz_attempts`);
     }
-    // Alter users.id to INT
+
+    // Now safely alter users.id
     await database.query(`ALTER TABLE users MODIFY id INT AUTO_INCREMENT`);
   }
 
-  // Check if questions.id type is compatible
+  // Fix questions.id type if needed
   const questionsIdType = await getColumnType("questions", "id");
   if (questionsIdType && questionsIdType.toLowerCase() !== "int") {
     console.log(`Fixing questions.id type: ${questionsIdType} -> int`);
-    const [quizAnswersExists] = await database.query(
-      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'quiz_answers'`
-    );
-    if (quizAnswersExists.length > 0) {
+    await dropAllReferencingForeignKeys("questions", "id");
+
+    if (await tableExists("quiz_answers")) {
       await dropAllForeignKeys("quiz_answers");
       await database.query(`DROP TABLE quiz_answers`);
     }
+
     await database.query(`ALTER TABLE questions MODIFY id INT AUTO_INCREMENT`);
   }
 
@@ -153,15 +193,6 @@ async function initializeSchema() {
       FOREIGN KEY (user_id) REFERENCES users(id)
     )
   `);
-
-  // Check quiz_attempts.user_id compatibility
-  const userIdType = await getColumnType("quiz_attempts", "user_id");
-  if (userIdType && userIdType.toLowerCase() !== "int") {
-    console.log(`Fixing quiz_attempts.user_id type: ${userIdType} -> int`);
-    await dropAllForeignKeys("quiz_attempts");
-    await database.query(`ALTER TABLE quiz_attempts MODIFY user_id INT NOT NULL`);
-    await database.query(`ALTER TABLE quiz_attempts ADD FOREIGN KEY (user_id) REFERENCES users(id)`);
-  }
 
   // Create quiz_answers (with FKs to quiz_attempts and questions)
   await database.query(`
