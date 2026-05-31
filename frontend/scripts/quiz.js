@@ -1,16 +1,7 @@
 class QuizSoundManager {
   constructor() {
     this.correctSounds = [
-      'https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3',
-      'https://www.myinstants.com/media/sounds/yippee-tbh.mp3',
-      'https://www.myinstants.com/media/sounds/mario-coin.mp3',
-      'https://www.myinstants.com/media/sounds/yay_zP2fHn6.mp3',
-      'https://www.myinstants.com/media/sounds/correct-ding.mp3',
-      'https://www.myinstants.com/media/sounds/mlg-airhorn.mp3',
-      'https://www.myinstants.com/media/sounds/taco-bell-bong-sfx.mp3',
-      'https://www.myinstants.com/media/sounds/bell-ding.mp3',
-      'https://www.myinstants.com/media/sounds/ta-da-orchestral-fanfare.mp3',
-      'https://www.myinstants.com/media/sounds/success-1-sfx.mp3'
+      'https://www.myinstants.com/media/sounds/oh-my-god-meme.mp3'
     ];
 
     this.wrongSounds = [
