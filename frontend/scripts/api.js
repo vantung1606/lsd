@@ -84,7 +84,7 @@ window.navigateTo = function(url) {
 
 class BackgroundMusic {
   constructor() {
-    this.bgAudio = new Audio('https://www.myinstants.com/media/sounds/kahoot-lobby-music.mp3');
+    this.bgAudio = new Audio('https://www.myinstants.com/media/sounds/lofi-beats-to-relax.mp3');
     this.bgAudio.loop = true;
     this.bgAudio.volume = 0.3;
     this.isPlaying = false;

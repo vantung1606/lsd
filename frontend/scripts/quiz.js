@@ -1,19 +1,18 @@
 class QuizSoundManager {
   constructor() {
     this.correctSounds = [
-      'https://www.myinstants.com/media/sounds/oh-my-god-meme.mp3'
+      'https://www.myinstants.com/media/sounds/oh-my-god-meme.mp3',
+      'https://www.myinstants.com/media/sounds/10-diem.mp3',
+      'https://www.myinstants.com/media/sounds/ghe-chua-ghe-chua.mp3',
+      'https://www.myinstants.com/media/sounds/tieng-vo-tay.mp3'
     ];
 
     this.wrongSounds = [
-      'https://www.myinstants.com/media/sounds/bruh.mp3',
-      'https://www.myinstants.com/media/sounds/sad-trombone.mp3',
-      'https://www.myinstants.com/media/sounds/vine-boom.mp3',
-      'https://www.myinstants.com/media/sounds/windows-xp-error.mp3',
-      'https://www.myinstants.com/media/sounds/fart-with-reverb.mp3',
-      'https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3',
-      'https://www.myinstants.com/media/sounds/dun-dun-dunnn.mp3',
-      'https://www.myinstants.com/media/sounds/spongebob-fail.mp3',
-      'https://www.myinstants.com/media/sounds/metal-gear-solid-alert.mp3'
+      'https://www.myinstants.com/media/sounds/gago-effect-by-cong-tv.mp3',
+      'https://www.myinstants.com/media/sounds/kha-banh-ao-that-day.mp3',
+      'https://www.myinstants.com/media/sounds/y2mate-mp3cut_d1tt0z9.mp3',
+      'https://www.myinstants.com/media/sounds/ua-j-zo.mp3',
+      'https://www.myinstants.com/media/sounds/anh-nhac-em.mp3'
     ];
     
     this.finishSound = new Audio('https://www.myinstants.com/media/sounds/final-fantasy-vii-victory-fanfare-1.mp3');
