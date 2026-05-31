@@ -45,39 +45,6 @@ body {
   background-attachment: fixed;
 }
 
-/* Floating decorative bubbles in Stitch colors */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  border-radius: 50%;
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 0;
-}
-
-body::before {
-  width: 300px;
-  height: 300px;
-  background: #4da6ff;
-  top: -80px;
-  right: -60px;
-  animation: float 8s ease-in-out infinite;
-}
-
-body::after {
-  width: 200px;
-  height: 200px;
-  background: #33cc80;
-  bottom: -50px;
-  left: -40px;
-  animation: float 6s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-20px) scale(1.05); }
-}
 
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
@@ -1627,32 +1594,6 @@ body {
   overflow-x: hidden;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  top: -100px;
-  right: -100px;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(230,240,255,0.9) 0%, rgba(230,240,255,0) 70%);
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  bottom: -50px;
-  left: -150px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(230,255,240,0.9) 0%, rgba(230,255,240,0) 70%);
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
-}
-
 .page {
   padding: 45px 16px 40px 16px !important;
   animation: slideInRight 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
@@ -2154,42 +2095,4 @@ body .page h1::before {
   0% { transform: scale(0.8); opacity: 0; }
   60% { transform: scale(1.05); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
-}
-
-.floating-images-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
-  overflow: hidden;
-}
-
-.floating-image-bubble {
-  position: absolute;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  animation: floatUpImage ease-in forwards;
-  opacity: 0;
-}
-
-@keyframes floatUpImage {
-  0% {
-    transform: translateY(0) translateX(0) scale(0.5) rotate(-10deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-110vh) translateX(var(--sway)) scale(1.2) rotate(10deg);
-    opacity: 0;
-  }
 }

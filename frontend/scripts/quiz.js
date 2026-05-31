@@ -156,10 +156,8 @@ function handleAnswer(question, selectedOptionIndex) {
 
   if (isCorrect) {
     sounds.playCorrect();
-    createFloatingImages("happy");
   } else {
     sounds.playWrong();
-    createFloatingImages("sad");
   }
 
   optionButtons.forEach((button, index) => {
@@ -301,35 +299,3 @@ async function initQuiz() {
 
 
 initQuiz();
-
-
-function createFloatingImages(type) {
-  const container = document.createElement('div');
-  container.className = 'floating-images-container';
-  document.body.appendChild(container);
-  
-  const imgSrc = type === 'happy' ? './assets/happy.png' : './assets/sad.png';
-  const numImages = 15; // 1 đống ảnh
-  
-  for (let i = 0; i < numImages; i++) {
-    const img = document.createElement('img');
-    img.src = imgSrc;
-    img.className = 'floating-image-bubble';
-    
-    const size = Math.random() * 50 + 50; // 50px - 100px
-    img.style.width = size + 'px';
-    img.style.height = size + 'px';
-    img.style.left = (Math.random() * 90) + 'vw';
-    img.style.bottom = '-120px';
-    
-    img.style.animationDuration = (Math.random() * 4 + 4) + 's';
-    img.style.animationDelay = (Math.random() * 0.3) + 's';
-    
-    const sway = (Math.random() - 0.5) * 150;
-    img.style.setProperty('--sway', sway + 'px');
-    
-    container.appendChild(img);
-  }
-  
-  setTimeout(() => container.remove(), 9000);
-}
