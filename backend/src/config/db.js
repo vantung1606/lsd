@@ -136,6 +136,18 @@ async function initializeSchema() {
     )
   `);
 
+  await database.query(`
+    CREATE TABLE IF NOT EXISTS quiz_progress (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      section_key VARCHAR(80) NOT NULL,
+      current_index INT NOT NULL DEFAULT 0,
+      answers_json JSON,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      UNIQUE KEY unique_user_section (user_id, section_key),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
   console.log("Database schema initialized successfully.");
 }
 

@@ -9,8 +9,14 @@
   <body>
     <main class="page">
       <section class="card scrollable">
-        <button id="music-toggle" class="music-toggle-btn" title="Bật/Tắt nhạc nền">🎵</button>
+        <button id="exit-button" class="exit-btn" onclick="window.navigateTo('./menu.html')">🚪 Thoát</button>
+      <div class="sound-controls">
+        <button id="music-toggle" class="sound-toggle-btn" title="Bật/Tắt nhạc nền">🎵</button>
+        <button id="meme-toggle" class="sound-toggle-btn playing" title="Bật/Tắt nhạc Meme">🔊</button>
+      </div>
         
+      
+
         <div class="quiz-header-section">
           <h1 id="quiz-section-title">Bộ câu hỏi</h1>
           <div id="quiz-question-number-header">Câu hỏi</div>
@@ -27,14 +33,10 @@
 
         <div id="options-container" class="options-grid"></div>
 
-        <div id="explanation-box" class="explanation hidden"></div>
-
         <div class="quiz-navigation">
           <button id="prev-button" class="nav-button prev-btn hidden">← Câu trước</button>
           <button id="next-button" class="nav-button next-btn hidden">Câu tiếp theo ➜</button>
         </div>
-
-        <button id="giant-next-button" class="primary-button hidden">Câu tiếp theo</button>
       </section>
     </main>
 

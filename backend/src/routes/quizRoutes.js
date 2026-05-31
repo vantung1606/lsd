@@ -146,4 +146,61 @@ router.post("/submit", requireAuth, async (request, response) => {
   }
 });
 
+router.post("/progress", requireAuth, async (request, response) => {
+  try {
+    const { sectionKey, currentIndex, answers } = request.body;
+    const database = getDatabase();
+    
+    await database.query(`
+      INSERT INTO quiz_progress (user_id, section_key, current_index, answers_json)
+      VALUES (?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        current_index = VALUES(current_index),
+        answers_json = VALUES(answers_json)
+    `, [request.user.userId, sectionKey, currentIndex, JSON.stringify(answers)]);
+
+    return response.status(200).json({ message: "Progress saved." });
+  } catch (error) {
+    return response.status(500).json({ message: "Failed to save progress.", error: error.message });
+  }
+});
+
+router.get("/progress", requireAuth, async (request, response) => {
+  try {
+    const database = getDatabase();
+    const sectionKey = request.query.sectionKey;
+    if (sectionKey) {
+      const [rows] = await database.query(`
+        SELECT current_index, answers_json FROM quiz_progress
+        WHERE user_id = ? AND section_key = ?
+      `, [request.user.userId, sectionKey]);
+      if (rows.length > 0) {
+        return response.status(200).json({ progress: rows[0] });
+      }
+      return response.status(200).json({ progress: null });
+    } else {
+      const [rows] = await database.query(`
+        SELECT section_key FROM quiz_progress WHERE user_id = ?
+      `, [request.user.userId]);
+      const activeKeys = rows.map(r => r.section_key);
+      return response.status(200).json({ activeKeys });
+    }
+  } catch (error) {
+    return response.status(500).json({ message: "Failed to fetch progress.", error: error.message });
+  }
+});
+
+router.delete("/progress", requireAuth, async (request, response) => {
+  try {
+    const sectionKey = request.query.sectionKey;
+    const database = getDatabase();
+    await database.query(`
+      DELETE FROM quiz_progress WHERE user_id = ? AND section_key = ?
+    `, [request.user.userId, sectionKey]);
+    return response.status(200).json({ message: "Progress cleared." });
+  } catch (error) {
+    return response.status(500).json({ message: "Failed to clear progress.", error: error.message });
+  }
+});
+
 module.exports = router;

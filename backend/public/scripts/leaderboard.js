@@ -1,5 +1,5 @@
 if (!getToken()) {
-  window.location.href = "./auth.html";
+  window.navigateTo("./auth.html");
 }
 
 const tbody = document.getElementById("leaderboard-body");
@@ -59,7 +59,7 @@ async function loadLeaderboard(limit) {
       tbody.appendChild(row);
     });
   } catch (error) {
-    alert(error.message);
+    await cuteAlert(error.message);
   }
 }
 

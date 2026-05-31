@@ -1,0 +1,319 @@
+
+/* ========================================== */
+/* ========= WOW FACTOR OVERRIDES =========== */
+/* ========================================== */
+
+body {
+  background-color: #fffafb !important;
+  background-image: radial-gradient(#ffe0e9 2.5px, transparent 2.5px) !important;
+  background-size: 32px 32px !important;
+  background-position: 0 0 !important;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: -100px;
+  right: -100px;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(230,240,255,0.9) 0%, rgba(230,240,255,0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  bottom: -50px;
+  left: -150px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(230,255,240,0.9) 0%, rgba(230,255,240,0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.page {
+  padding: 20px 16px 40px 16px !important;
+}
+
+.page .card {
+  padding: 15px 22px 40px 22px !important;
+  max-width: 460px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* H1 - Hello nvt */
+body .page h1 {
+  font-family: "Baloo 2", cursive;
+  font-size: 2.8rem !important;
+  color: #ff7ea1 !important;
+  margin-top: 15px;
+  margin-bottom: 2px !important;
+  text-shadow: 
+    3px 3px 0 #fff, 
+    -3px -3px 0 #fff, 
+    3px -3px 0 #fff, 
+    -3px 3px 0 #fff,
+    0 3px 0 #fff,
+    0 -3px 0 #fff,
+    3px 0 0 #fff,
+    -3px 0 0 #fff,
+    0 8px 15px rgba(255, 126, 161, 0.25) !important;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  position: relative;
+  z-index: 10;
+}
+
+body .page h1 .title-text {
+  color: #ff7ea1 !important;
+}
+
+body .page h1::before {
+  display: none !important;
+}
+
+.subtitle {
+  font-size: 1.05rem !important;
+  color: #8c7e84 !important;
+  font-weight: 700;
+  margin-top: 0px;
+  margin-bottom: 25px !important;
+  position: relative;
+  z-index: 10;
+  letter-spacing: 0.2px;
+}
+
+/* Stats Hearts */
+.stats-bar {
+  gap: 15px !important;
+  margin-bottom: 35px !important;
+}
+
+.stat-item {
+  width: 105px !important;
+  height: 105px !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 95"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23ffb3ce"/><stop offset="100%" stop-color="%23ff7ea1"/></linearGradient><filter id="drop"><feDropShadow dx="0" dy="6" stdDeviation="4" flood-color="%23ff7ea1" flood-opacity="0.3"/></filter></defs><path d="M50,90 C50,90 5,60 5,30 A24,24 0 0,1 50,25 A24,24 0 0,1 95,30 C95,60 50,90 50,90 Z" fill="url(%23g)" filter="url(%23drop)"/></svg>') !important;
+  background-size: contain !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s ease !important;
+}
+.stat-item:hover {
+  transform: translateY(-5px) scale(1.05) !important;
+}
+.stat-item::before, .stat-item::after { display: none !important; }
+
+.stat-item .stat-value {
+  font-size: 2.1rem !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  text-shadow: 0 3px 6px rgba(219, 61, 114, 0.6) !important;
+  margin-top: -12px !important;
+}
+.stat-item .stat-label {
+  font-size: 0.6rem !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  text-shadow: 0 2px 4px rgba(219, 61, 114, 0.6) !important;
+  margin-top: -8px !important;
+  letter-spacing: 0.8px !important;
+}
+
+/* Sections Title */
+.menu-section-title {
+  color: #c93175 !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 18px !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Range buttons (1-50, etc) */
+#range-sections {
+  gap: 14px 10px !important;
+  margin-bottom: 35px !important;
+}
+
+#range-sections .range-button {
+  border-radius: 30px !important;
+  padding: 16px 4px !important;
+  font-size: 0.95rem !important;
+  font-weight: 900 !important;
+  border: none !important;
+  box-shadow: 0 6px 0 var(--btn-border), 0 10px 15px rgba(0,0,0,0.06) !important;
+  transform: none !important;
+  transition: transform 0.1s, box-shadow 0.1s !important;
+  position: relative;
+}
+
+#range-sections .range-button:active {
+  transform: translateY(6px) !important;
+  box-shadow: 0 0px 0 var(--btn-border), 0 2px 5px rgba(0,0,0,0.06) !important;
+}
+
+#range-sections .range-button::after {
+  content: '🎀' !important;
+  position: absolute !important;
+  top: -12px !important;
+  right: -6px !important;
+  font-size: 1.4rem !important;
+  filter: drop-shadow(0 3px 3px rgba(0,0,0,0.15)) !important;
+}
+
+/* Mock test buttons (Đề thi thử) */
+#mock-sections {
+  gap: 14px 12px !important;
+  margin-bottom: 30px !important;
+}
+
+#mock-sections .range-button {
+  border-radius: 18px !important;
+  border: 3px solid var(--btn-border) !important;
+  outline: 2px dashed var(--btn-border) !important;
+  outline-offset: -7px !important;
+  box-shadow: 0 6px 0 var(--btn-border), 0 10px 15px rgba(0,0,0,0.05) !important;
+  padding: 18px 8px 18px 24px !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  transform: none !important;
+  transition: transform 0.1s, box-shadow 0.1s !important;
+  position: relative;
+  background: var(--btn-bg) !important;
+}
+
+#mock-sections .range-button:active {
+  transform: translateY(6px) !important;
+  box-shadow: 0 0px 0 var(--btn-border), 0 2px 5px rgba(0,0,0,0.05) !important;
+}
+
+#mock-sections .range-button::before {
+  content: '🤎\\A🤎\\A🤎' !important;
+  position: absolute !important;
+  left: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 0.55rem !important;
+  line-height: 1.7 !important;
+  color: #7a4b33 !important;
+}
+
+#mock-sections .range-button::after {
+  content: '🎀' !important;
+  position: absolute !important;
+  top: -12px !important;
+  right: -6px !important;
+  font-size: 1.4rem !important;
+  filter: drop-shadow(0 3px 3px rgba(0,0,0,0.15)) !important;
+}
+
+/* Colors for ranges & mocks to match screenshot exactly */
+#range-sections .range-button:nth-child(4n+1), #mock-sections .range-button:nth-child(3n+1) {
+  --btn-bg: #ffe8ee; --btn-border: #ff6b8b; --btn-color: #8c1d34;
+}
+#range-sections .range-button:nth-child(4n+2), #mock-sections .range-button:nth-child(3n+2) {
+  --btn-bg: #fff5d6; --btn-border: #ffb833; --btn-color: #8a5500;
+}
+#range-sections .range-button:nth-child(4n+3), #mock-sections .range-button:nth-child(3n+3) {
+  --btn-bg: #e6f2ff; --btn-border: #4da6ff; --btn-color: #004d99;
+}
+#range-sections .range-button:nth-child(4n+4), #mock-sections .range-button:nth-child(3n+4) {
+  --btn-bg: #f2e6ff; --btn-border: #b366ff; --btn-color: #4c0099;
+}
+#range-sections .range-button:nth-child(4n+5), #mock-sections .range-button:nth-child(3n+5) {
+  --btn-bg: #e6ffed; --btn-border: #33cc80; --btn-color: #006633;
+}
+#range-sections .range-button:nth-child(4n+6), #mock-sections .range-button:nth-child(3n+6) {
+  --btn-bg: #ffedd6; --btn-border: #ff9933; --btn-color: #994d00;
+}
+#range-sections .range-button:nth-child(4n+7) {
+  --btn-bg: #e6f2ff; --btn-border: #4da6ff; --btn-color: #004d99;
+}
+#range-sections .range-button:nth-child(4n+8) {
+  --btn-bg: #f2e6ff; --btn-border: #b366ff; --btn-color: #4c0099;
+}
+
+/* Bảng xếp hạng */
+.primary-button {
+  background: #c27d5e !important;
+  border-radius: 14px !important;
+  border: 3px solid #fff !important;
+  outline: 2px dashed #fff !important;
+  outline-offset: -8px !important;
+  box-shadow: 0 0 0 3px #c27d5e, 0 8px 0 #9c5c40, 0 10px 15px rgba(0,0,0,0.1) !important;
+  margin-top: 15px !important;
+  margin-bottom: 10px !important;
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  padding: 16px !important;
+  color: #fff !important;
+  text-shadow: 0 2px 4px rgba(156, 92, 64, 0.8) !important;
+}
+
+.primary-button:active {
+  transform: translateY(8px) !important;
+  box-shadow: 0 0 0 3px #c27d5e, 0 0px 0 #9c5c40 !important;
+}
+
+.primary-button::before {
+  content: '🏆' !important;
+  font-size: 1.6rem !important;
+  margin-right: 12px !important;
+  filter: drop-shadow(0 2px 2px rgba(156, 92, 64, 0.6)) !important;
+}
+
+/* Đăng xuất */
+.danger-button {
+  background: repeating-linear-gradient(0deg, #ffc2d1 0px, #ffc2d1 3px, #ffb3c6 3px, #ffb3c6 6px) !important;
+  border-radius: 25px !important;
+  border: 3px solid #ff7ea1 !important;
+  box-shadow: 0 6px 0 #ff7ea1, 0 10px 15px rgba(0,0,0,0.1) !important;
+  color: #c93175 !important;
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  padding: 14px !important;
+  margin-top: 15px !important;
+  margin-bottom: 20px !important;
+}
+
+.danger-button:active {
+  transform: translateY(6px) !important;
+  box-shadow: 0 0px 0 #ff7ea1 !important;
+}
+.danger-button::before { display: none !important; }
+
+/* Corner Characters Update */
+.coconut-char {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><circle cx="55" cy="70" r="45" fill="%238c573c"/><circle cx="40" cy="65" r="5" fill="black"/><circle cx="70" cy="65" r="5" fill="black"/><path d="M50,75 Q55,80 60,75" stroke="black" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M15,30 L35,40 L55,20 L75,40 L95,30 L105,50 L15,50 Z" fill="%2333cc80"/><path d="M35,30 L55,10 L75,30 Z" fill="%234dff99"/><circle cx="100" cy="40" r="14" fill="%23ff5285"/><path d="M100,25 L100,55 M85,40 L115,40 M90,30 L110,50 M90,50 L110,30" stroke="%23ff8fa3" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="40" r="6" fill="%23ffd147"/></svg>') !important;
+  width: 150px !important;
+  height: 150px !important;
+  top: -5px !important;
+  left: 0px !important;
+  filter: drop-shadow(0 8px 15px rgba(140, 87, 60, 0.25)) !important;
+}
+.alien-char {
+  width: 130px !important;
+  height: 130px !important;
+  top: 5px !important;
+  right: 5px !important;
+  filter: drop-shadow(0 8px 15px rgba(77, 166, 255, 0.25)) !important;
+}
+
+/* Remove corner alien from bottom if it overlaps too much */
+.corner-char.bottom-left, .corner-char.bottom-right {
+  display: none !important; 
+}

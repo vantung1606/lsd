@@ -1,47 +1,63 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Menu | Lịch sử Đảng Quiz</title>
-    <link rel="stylesheet" href="./styles.css?v=9" />
-  </head>
-  <body>
-    <main class="page">
-      <section class="card scrollable">
-        <div class="kitty-bow">🎀</div>
-        <h1>Hello <span id="username-display"></span></h1>
-        <p class="subtitle">Chọn phần để làm bài và đua top</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Menu | Lịch sử Đảng Quiz</title>
+  <link rel="stylesheet" href="./styles.css?v=9" />
+</head>
+<body>
+  <main class="page">
+    <section class="card scrollable">
+      <div class="sound-controls">
+        <button id="music-toggle" class="sound-toggle-btn" title="Bật/Tắt nhạc nền">🎵</button>
+        <button id="meme-toggle" class="sound-toggle-btn playing" title="Bật/Tắt nhạc Meme">🔊</button>
+      </div>
+      <div class="kitty-bow">🎀</div>
+      <h1>Hello <span id="username-display"></span></h1>
+      <p class="subtitle">Chọn phần để làm bài và đua top</p>
 
-        <div class="stats-bar">
-          <div class="stat-item">
-            <div class="stat-value" id="stat-score">0</div>
-            <div class="stat-label">Tổng điểm</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="stat-correct">0</div>
-            <div class="stat-label">Tổng đúng</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="stat-attempts">0</div>
-            <div class="stat-label">Lượt chơi</div>
-          </div>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-score">0</div>
+          <div class="stat-label">Tổng điểm</div>
         </div>
-
-        <h2 class="menu-section-title">Bộ câu hỏi theo dải</h2>
-        <div class="range-grid" id="range-sections"></div>
-
-        <h2 class="menu-section-title">6 đề thi thử (mỗi đề 60 câu)</h2>
-        <div class="range-grid" id="mock-sections"></div>
-
-        <div class="menu-actions">
-          <a class="primary-button link-button" href="./leaderboard.html">Bảng xếp hạng</a>
-          <button id="logout-button" class="danger-button">Đăng xuất</button>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-correct">0</div>
+          <div class="stat-label">Tổng đúng</div>
         </div>
-      </section>
-    </main>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-attempts">0</div>
+          <div class="stat-label">Lượt chơi</div>
+        </div>
+      </div>
 
-    <script src="./scripts/api.js"></script>
-    <script src="./scripts/menu.js"></script>
-  </body>
+      <h2 class="menu-section-title">Bộ câu hỏi</h2>
+      <div class="range-grid" id="range-sections"></div>
+
+      <h2 class="menu-section-title">6 đề thi thử (mỗi đề 60 câu)</h2>
+      <div class="range-grid" id="mock-sections"></div>
+
+      <div class="menu-actions">
+        <a class="primary-button link-button" href="./leaderboard.html">Bảng xếp hạng</a>
+        <button id="logout-button" class="danger-button">Đăng xuất</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="order-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3 style="color: #ff5285; margin-bottom: 10px;">Tùy chọn làm bài</h3>
+      <p style="color: #666; font-size: 0.95rem;">Bạn muốn làm các câu hỏi theo thứ tự nào?</p>
+      <div class="modal-buttons" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+        <button id="btn-sequential" class="modal-btn-seq">Theo thứ tự</button>
+        <button id="btn-random" class="modal-btn-rand">Lộn xộn 🔀</button>
+      </div>
+      <button id="btn-close-modal" class="close-modal" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #999;">✖</button>
+    </div>
+  </div>
+
+  <script src="./scripts/api.js"></script>
+  <script src="./scripts/menu.js"></script>
+</body>
 </html>

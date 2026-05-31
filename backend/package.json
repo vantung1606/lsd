@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "seed": "node src/seed/seedQuestions.js",
-    "extract:images": "node src/seed/extractFromScreenshots.js",
-    "normalize:300": "node src/seed/normalizeTo300.js"
+    "import:excel": "node src/import/importFromExcel.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -17,7 +15,6 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.3",
-    "sharp": "^0.34.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
