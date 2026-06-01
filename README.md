@@ -3,7 +3,7 @@
 ## 1. Công nghệ sử dụng
 - Backend: Node.js, Express, MySQL (`mysql2`), JWT, bcrypt.
 - Frontend: HTML, CSS, JavaScript thuần.
-- Phong cách UI: Hello Kitty gamification (hồng pastel, biểu tượng dễ thương, font tròn).
+- Phong cách UI: Hello Kitty gamification (hồng pastel, biểu tượng dễ thương, font tròn)..
 
 ## 2. Cấu trúc thư mục
 ```text
